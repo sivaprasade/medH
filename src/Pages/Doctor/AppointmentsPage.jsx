@@ -59,44 +59,48 @@ const AppointmentsPage = () => {
   return (
     <div style={{ padding: "2rem" }}>
       <h1>Appointments</h1>
-      <List
-        itemLayout="horizontal"
-        dataSource={appointments}
-        renderItem={(appointment) => (
-          <List.Item
-            key={appointment.id}
-            actions={
-              appointment.status === "accepted"
-                ? [
-                    <div style={{ color: "green" }}>Accepted</div>,
-                    <Button type="primary">Chatroom</Button>,
-                  ]
-                : appointment.status === "rejected"
-                ? [<div style={{ color: "red" }}>Rejected</div>]
-                : [
-                    <Button
-                      type="primary"
-                      onClick={() => handleAccept(appointment._id)}
-                    >
-                      Accept
-                    </Button>,
-                    <Button
-                      type="primary"
-                      danger
-                      onClick={() => handleReject(appointment._id)}
-                    >
-                      Reject
-                    </Button>,
-                  ]
-            }
-          >
-            <List.Item.Meta
-              title={`Patient: ${appointment.username}`}
-              description={`Notes: ${appointment.notes}`}
-            />
-          </List.Item>
-        )}
-      />
+      {appointments && appointments.length === 0 ? (
+        <p>No appointments yet</p>
+      ) : (
+        <List
+          itemLayout="horizontal"
+          dataSource={appointments}
+          renderItem={(appointment) => (
+            <List.Item
+              key={appointment.id}
+              actions={
+                appointment.status === "accepted"
+                  ? [
+                      <div style={{ color: "green" }}>Accepted</div>,
+                      <Button type="primary">Chatroom</Button>,
+                    ]
+                  : appointment.status === "rejected"
+                  ? [<div style={{ color: "red" }}>Rejected</div>]
+                  : [
+                      <Button
+                        type="primary"
+                        onClick={() => handleAccept(appointment._id)}
+                      >
+                        Accept
+                      </Button>,
+                      <Button
+                        type="primary"
+                        danger
+                        onClick={() => handleReject(appointment._id)}
+                      >
+                        Reject
+                      </Button>,
+                    ]
+              }
+            >
+              <List.Item.Meta
+                title={`Patient: ${appointment.username}`}
+                description={`Notes: ${appointment.notes}`}
+              />
+            </List.Item>
+          )}
+        />
+      )}
     </div>
   );
 };

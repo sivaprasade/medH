@@ -1,6 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { Button, List, message } from "antd";
-import { getDoctors, bookAppointment, getAppointmentsByDoctorId } from "../../utils/api";
+import {
+  getDoctors,
+  bookAppointment,
+  getAppointmentsByDoctorId,
+} from "../../utils/api";
 import AppointmentForm from "../../components/Patient/AppointmentForm";
 
 const DoctorListPage = () => {
@@ -55,9 +59,11 @@ const DoctorListPage = () => {
   const handleSubmit = async (values) => {
     const user_id = userId;
     const doctor_id = selectedDoctor._id;
+    const doctorname = selectedDoctor.name;
 
     const appointmentData = {
       ...values,
+      doctorname,
       username,
       user_id,
       doctor_id,
@@ -74,74 +80,55 @@ const DoctorListPage = () => {
     }
   };
 
-  const handleEditAppointment = (appointment) => {
-    console.log(`Editing appointment with id: ${appointment._id}`);
-  };
-
-  const handleDeleteAppointment = (appointment) => {
-    console.log(`Deleting appointment with id: ${appointment._id}`);
-  };
-
   return (
-    <div>
+    <div >
+      <h1>Available Doctors</h1>
+      <p>
+        Online consultation with doctors has both advantages and disadvantages.
+        It is convenient and time-saving as it eliminates the need to travel to
+        the doctor's clinic. However, it may not be suitable for certain medical
+        conditions that require physical examination. Always consult your doctor
+        before opting for online consultation.
+      </p>
       {doctors.length > 0 ? (
         <List
-        dataSource={doctors}
-        renderItem={(doctor) => {
-          const appointment = appointments.find(
-            (appointment) => appointment.doctor_id === doctor._id
-          );
-      
-          if (appointment) {
-            return (
-              <List.Item
-                actions={[
-                  <Button
-                    key="edit"
-                    type="primary"
-                    onClick={() => handleEditAppointment(appointment)}
-                  >
-                    Edit Appointment
-                  </Button>,
-                  <Button
-                    key="delete"
-                    type="primary"
-                    danger
-                    onClick={() => handleDeleteAppointment(appointment)}
-                  >
-                    Delete Appointment
-                  </Button>,
-                ]}
-              >
-                <List.Item.Meta
-                  title={doctor.name}
-                  description={`Speciality: ${doctor.speciality}, Years of experience: ${doctor.years_of_experience}`}
-                />
-              </List.Item>
+          dataSource={doctors}
+          renderItem={(doctor) => {
+            const appointment = appointments.find(
+              (appointment) => appointment.doctor_id === doctor._id
             );
-          } else {
-            return (
-              <List.Item
-                actions={[
-                  <Button
-                    key="book"
-                    type="primary"
-                    onClick={() => handleBookAppointment(doctor)}
-                  >
-                    Book Appointment
-                  </Button>,
-                ]}
-              >
-                <List.Item.Meta
-                  title={doctor.name}
-                  description={`Speciality: ${doctor.speciality}, Years of experience: ${doctor.years_of_experience}`}
-                />
-              </List.Item>
-            );
-          }
-        }}
-      />
-      
+
+            if (appointment) {
+              return (
+                <List.Item>
+                  <List.Item.Meta
+                    title={doctor.name}
+                    description={`Speciality: ${doctor.speciality}, Years of experience: ${doctor.years_of_experience}`}
+                  />
+                </List.Item>
+              );
+            } else {
+              return (
+                <List.Item
+                  actions={[
+                    <Button
+                      key="book"
+                      type="primary"
+                      onClick={() => handleBookAppointment(doctor)}
+                    >
+                      Book Appointment
+                    </Button>,
+                  ]}
+                >
+                  <List.Item.Meta
+                    title={doctor.name}
+                    description={`Speciality: ${doctor.speciality}, Years of experience: ${doctor.years_of_experience}`}
+                  />
+                </List.Item>
+              );
+            }
+          }}
+        />
       ) : (
         <p>No doctors available.</p>
       )}

@@ -221,3 +221,83 @@ export const rejectAppointment = async (appointmentId) => {
   }
 };
 
+// list appointments by user id
+export const listAppointmentsByUserId = async (userId) => {
+  try {
+    const response = await axios.get(`${API_URL}/api/appointments/by-user/${userId}`);
+    return response.data;
+  } catch (error) {
+    console.error(error);
+    return null;
+  }
+};
+
+
+// edit appointment
+export const editAppointment = async (appointmentData) => {
+  try {
+    const data = {
+      appointment_id : appointmentData.appointment_id,
+      new_appointment_time: appointmentData.appointment_time,
+      new_notes: appointmentData.notes,
+    };
+    const appointmentId = appointmentData.appointment_id;
+    const response = await axios.patch(`${API_URL}/api/appointments/${appointmentId}`, data);
+    return response.data;
+  } catch (error) {
+    console.error(error);
+    return null;
+  }
+};
+
+// delete appointment
+export const deleteAppointment = async (appointmentId) => {
+  try {
+    const response = await axios.delete(`${API_URL}/api/appointments/${appointmentId}`);
+    return response.data;
+  } catch (error) {
+    console.error(error);
+    return null;
+  }
+};
+
+// get accepted appointments by user id
+export const getAcceptedAppointmentsByUserId = async (userId) => {
+  try {
+    const response = await axios.get(`${API_URL}/api/appointments/by-status-user/${userId}`);
+    return response.data;
+  } catch (error) {
+    console.error(error);
+    return null;
+  }
+};
+
+
+// ---------------------- ChatRoom ---------------------- //
+
+// send message in chat room
+export const sendMessage = async (roomId, message, senderId) => {
+  try {
+    const response = await axios.post(`${API_URL}/api/chat/${roomId}/send`, message, {
+      headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+      params: { sender_id: senderId }
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Error sending message:", error);
+    return null;
+  }
+};
+
+// get messages in chat room
+export const getMessages = async (roomId) => {
+  try {
+    const response = await axios.get(`${API_URL}/api/chat/${roomId}/messages`, {
+      headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Error getting messages:", error);
+    return null;
+  }
+};

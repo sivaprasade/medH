@@ -4,7 +4,8 @@ import {
   WechatOutlined,
   LogoutOutlined,
   ScheduleOutlined,
-  UploadOutlined,
+  FileOutlined,
+  
 } from "@ant-design/icons";
 import { logout_user } from "../../utils/api"; // Import the API function
 import { useNavigate } from "react-router-dom";
@@ -16,28 +17,28 @@ const { Title, Paragraph } = Typography;
 const PatientHomePage = () => {
   const userId = localStorage.getItem("patient_id");
   const userName = localStorage.getItem("patient_name");
-  const userType = "patient"
-  // const [userType, setUserType] = useState("");
+  const userType = "patient";
 
   useEffect(() => {
     console.log(`Patient ID: ${userId}`);
     console.log(`Patient Name: ${userName}`);
-    //setUserType(localStorage.getItem("user_type"));
   }, []);
 
   const navigate = useNavigate();
 
   const handleBookAppointment = () => {
     // Code for booking appointments
-    navigate("/doctor-list");
+    navigate("/appointment-home");
   };
 
   const handleChatWithDoctor = () => {
     // Code for chatting with a doctor
+    navigate("/chat-home");
   };
 
   const handleUploadMedicalRecords = () => {
     // Code for uploading medical records
+    navigate("/medical-records");
   };
 
   const handleLogout = async () => {
@@ -103,10 +104,10 @@ const PatientHomePage = () => {
         <Col span={24}>
           <Button
             type="primary"
-            icon={<UploadOutlined />}
+            icon={<FileOutlined />}
             onClick={handleUploadMedicalRecords}
           >
-            Upload Medical Records
+            Medical Records
           </Button>
         </Col>
         <Col span={24}>
