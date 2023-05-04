@@ -16,12 +16,13 @@ const { Title, Paragraph } = Typography;
 const PatientHomePage = () => {
   const userId = localStorage.getItem("patient_id");
   const userName = localStorage.getItem("patient_name");
-  const [userType, setUserType] = useState("");
+  const userType = "patient"
+  // const [userType, setUserType] = useState("");
 
   useEffect(() => {
     console.log(`Patient ID: ${userId}`);
     console.log(`Patient Name: ${userName}`);
-    setUserType(localStorage.getItem("user_type"));
+    //setUserType(localStorage.getItem("user_type"));
   }, []);
 
   const navigate = useNavigate();

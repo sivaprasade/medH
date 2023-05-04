@@ -1,5 +1,5 @@
 import React from "react";
-import { Typography, Input, Button, Form, Select } from "antd";
+import { Typography, Input, Button, Form, Select, message } from "antd";
 import { useNavigate } from "react-router-dom";
 import { registerUser } from "../.././utils/api";
 
@@ -11,17 +11,32 @@ const PatientRegisterForm = () => {
   const navigate = useNavigate();
 
   const handleSubmit = async (values) => {
-    const response = await registerUser(values);
-
-    if (response && response.access_token) {
-      message.success("Patient registered successfully");
-      console.log("Registration successful");
-      localStorage.setItem("access_token", response.access_token);
-      navigate("/home");
-    } else {
-      console.error("Error during registration");
+    try {
+      const response = await registerUser(values);
+      if (response && response.access_token) {
+        console.log(response);
+        const user = response.user;
+        const userId = user.id;
+        const userName = values.name;
+        const userType = "patient";
+        message.success("Patient registered successfully");
+        console.log("Registration successful");
+        localStorage.setItem("access_token", response.access_token);
+        console.log(`${userType} ${userName} logged in successfully`);
+        localStorage.setItem(`${userType}_id`, userId);
+        localStorage.setItem(`${userType}_name`, userName);
+        localStorage.setItem("user_type", userType);
+        navigate("/patient-home");
+      } else {
+        console.error("Error during registration");
+        message.error("Error during registration. Please try again later.");
+      }
+    } catch (error) {
+      console.error("Error during registration", error);
+      message.error("Error during registration. Please try again later.");
     }
   };
+  
 
   return (
     <Form

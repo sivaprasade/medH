@@ -25,7 +25,7 @@ const AppointmentsPage = () => {
       .then(() => {
         setAppointments((prevAppointments) =>
           prevAppointments.map((appointment) => {
-            if (appointment.id === appointmentId) {
+            if (appointment._id === appointmentId) {
               appointment.status = "Accepted";
             }
             return appointment;
@@ -43,7 +43,7 @@ const AppointmentsPage = () => {
       .then(() => {
         setAppointments((prevAppointments) =>
           prevAppointments.map((appointment) => {
-            if (appointment.id === appointmentId) {
+            if (appointment._id === appointmentId) {
               appointment.status = "Rejected";
             }
             return appointment;
@@ -64,14 +64,14 @@ const AppointmentsPage = () => {
         dataSource={appointments}
         renderItem={(appointment) => (
           <List.Item
-            key={appointment._id}
+            key={appointment.id}
             actions={
-              appointment.status === "Accepted"
+              appointment.status === "accepted"
                 ? [
                     <div style={{ color: "green" }}>Accepted</div>,
                     <Button type="primary">Chatroom</Button>,
                   ]
-                : appointment.status === "Rejected"
+                : appointment.status === "rejected"
                 ? [<div style={{ color: "red" }}>Rejected</div>]
                 : [
                     <Button
@@ -94,33 +94,6 @@ const AppointmentsPage = () => {
               title={`Patient: ${appointment.username}`}
               description={`Notes: ${appointment.notes}`}
             />
-            {appointment.status === "Accepted" ? (
-              <div style={{ color: "green" }}>Accepted</div>
-            ) : appointment.status === "Rejected" ? (
-              <div style={{ color: "red" }}>Rejected</div>
-            ) : null}
-
-            {appointment.status === "Pending" ? (
-              <div>
-                <Button
-                  type="primary"
-                  onClick={() => handleAccept(appointment._id)}
-                >
-                  Accept
-                </Button>
-                <Button
-                  type="primary"
-                  danger
-                  onClick={() => handleReject(appointment._id)}
-                >
-                  Reject
-                </Button>
-              </div>
-            ) : null}
-
-            <div>{`Time: ${new Date(
-              appointment.appointment_time
-            ).toLocaleTimeString()}`}</div>
           </List.Item>
         )}
       />
