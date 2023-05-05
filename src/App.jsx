@@ -10,6 +10,7 @@ import ListAppointmentPage from './Pages/Patient/ListAppointmentPage';
 import DoctorChatPage from './Pages/Patient/DoctorChatPage';
 import ChatRoom from './Pages/Shared/ChatRoom';
 import PatientMedicalRecordHome from './Pages/Patient/PatientMedicalRecordHome';
+import ListMedicalRecords from './Pages/Patient/ListMedicalRecords';
 
 function App() {
   return (
@@ -26,6 +27,7 @@ function App() {
         <Route path="/chat-home" element={<DoctorChatPage />} />
         <Route path="/chat/:roomId" element={<ChatRoom />} />
         <Route path="/medical-records" element={<PatientMedicalRecordHome />} />
+        <Route path="/list-medical-records" element={<ListMedicalRecords />} />
       </Routes>
     </Router>
   );

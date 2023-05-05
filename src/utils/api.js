@@ -301,3 +301,121 @@ export const getMessages = async (roomId) => {
     return null;
   }
 };
+
+
+// ---------------------- Medical Records ---------------------- //
+
+// add medical record
+export const addMedicalRecord = async (record) => {
+  try {
+    const response = await axios.post(`${API_URL}/api/medical-data`, record, {
+      headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Error adding medical record:", error);
+    return null;
+  }
+};
+
+// update medical record
+export const updateMedicalRecord = async (recordId, record) => {
+  try {
+    const response = await axios.patch(`${API_URL}/api/medical-data/${recordId}`, record, {
+      headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Error updating medical record:", error);
+    return null;
+  }
+};
+
+// get medical record
+export const getMedicalRecord = async (recordId) => {
+  try {
+    const response = await axios.get(`${API_URL}/api/medical-data/${recordId}`, {
+      headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Error getting medical record:", error);
+    return null;
+  }
+};
+
+// upload medical file
+export const uploadMedicalFile = async (userId, file) => {
+  try {
+    const formData = new FormData();
+    formData.append("file", file);
+    const response = await axios.post(`${API_URL}/api/medical-data/${userId}/upload-file`, formData, {
+      headers: { 
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+        "Content-Type": "multipart/form-data",
+      },
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Error uploading medical file:", error);
+    return null;
+  }
+};
+
+// get medical file
+export const getMedicalFile = async (userId, filename) => {
+  try {
+    const response = await axios.get(`${API_URL}/api/medical-data/${userId}/file/${filename}`, {
+      headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+      responseType: "blob",
+    });
+    const file = new Blob([response.data], { type: response.headers["content-type"] });
+    const url = window.URL.createObjectURL(file);
+    const link = document.createElement("a");
+    link.href = url;
+    link.setAttribute("download", filename);
+    document.body.appendChild(link);
+    link.click();
+    return url;
+  } catch (error) {
+    console.error("Error getting medical file:", error);
+    return null;
+  }
+};
+
+
+// Get medical files
+export const getMedicalFiles = async (userId) => {
+  try {
+    const response = await axios.get(`${API_URL}/api/medical-data/${userId}/files`, {
+      headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Error getting medical files:", error);
+    return null;
+  }
+};
+
+// Download medical file
+export const downloadMedicalFile = async (userId, fileId, filename) => {
+  try {
+    const response = await axios.get(
+      `${API_URL}/api/medical-data/${userId}/file/${fileId}/${filename}`,
+      {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+        responseType: "blob",
+      }
+    );
+    const url = window.URL.createObjectURL(new Blob([response.data]));
+    const link = document.createElement("a");
+    link.href = url;
+    link.setAttribute("download", filename);
+    document.body.appendChild(link);
+    link.click();
+  } catch (error) {
+    console.error("Error downloading medical file:", error);
+  }
+};
