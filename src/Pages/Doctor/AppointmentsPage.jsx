@@ -5,9 +5,11 @@ import {
   rejectAppointment,
 } from "../../utils/api";
 import { Button, List, message } from "antd";
+import { useNavigate } from "react-router-dom";
 
 const AppointmentsPage = () => {
   const [appointments, setAppointments] = useState([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const doctorId = localStorage.getItem("doctor_id");
@@ -55,7 +57,9 @@ const AppointmentsPage = () => {
         message.error("Failed to reject appointment");
       });
   };
-
+  const handleChatRoom = (room_id) => {
+    navigate(`/chat/${room_id}`);
+  };
   return (
     <div style={{ padding: "2rem" }}>
       <h1>Appointments</h1>
@@ -72,7 +76,12 @@ const AppointmentsPage = () => {
                 appointment.status === "accepted"
                   ? [
                       <div style={{ color: "green" }}>Accepted</div>,
-                      <Button type="primary">Chatroom</Button>,
+                      <Button
+                        type="primary"
+                        onClick={() => handleChatRoom(appointment.room_id)}
+                      >
+                        Chatroom
+                      </Button>,
                     ]
                   : appointment.status === "rejected"
                   ? [<div style={{ color: "red" }}>Rejected</div>]

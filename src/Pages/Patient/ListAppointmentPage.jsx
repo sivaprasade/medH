@@ -2,10 +2,12 @@ import React, { useEffect, useState } from "react";
 import { Button, List, message } from "antd";
 import { deleteAppointment, editAppointment, listAppointmentsByUserId } from "../../utils/api";
 import AppointmentForm from "../../components/Patient/AppointmentForm";
+import { useNavigate } from "react-router-dom";
 
 const ListAppointmentPage = () => {
   const [appointments, setAppointments] = useState([]);
   const [visible, setVisible] = useState(false);
+  const navigate = useNavigate();
   const userId = localStorage.getItem("patient_id");
 
   useEffect(() => {
@@ -74,6 +76,8 @@ const ListAppointmentPage = () => {
   const handleChatRoom = (appointment) => {
     console.log(`Opening chat room for appointment with id: ${appointment._id}`);
     // TODO: Implement the chat room functionality
+    navigate(`/chat/${appointment.room_id}`);
+    
   };
 
   return (

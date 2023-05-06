@@ -31,10 +31,12 @@ const DoctorHomePage = ({ token }) => {
 
   const handleChatRooms = () => {
     // Code for managing chat rooms
+    navigate("/doctor-chat-home");
   };
 
   const handleMedicalRecords = () => {
     // Code for accessing medical records
+    navigate("/medical-records-for-doctor")
   };
 
   const handleLogout = async () => {

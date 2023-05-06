@@ -273,6 +273,21 @@ export const getAcceptedAppointmentsByUserId = async (userId) => {
 };
 
 
+// get appointments by doctor and status
+export const getAppointmentsByDoctorStatus = async (doctorId) => {
+  try {
+    const response = await axios.get(`${API_URL}/api/appointments/by-status-doctor/${doctorId}`, {
+      headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Error getting appointments by doctor and status:", error);
+    return null;
+  }
+};
+
+
+
 // ---------------------- ChatRoom ---------------------- //
 
 // send message in chat room
