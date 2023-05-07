@@ -46,6 +46,7 @@
     font-size: 16px;
     border: 1px solid #ddd;
     border-radius: 4px;
+    max-width: 350px;
   }
   
   .input-container button {
@@ -62,4 +63,25 @@
   .input-container button:hover {
     background-color: #40a9ff;
   }
+  
+  .chat-input-container {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    padding: 20px;
+    background-color: #fff;
+  }
+  .no-messages-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+  }
+  
+  .no-messages-container p {
+    text-align: center;
+  }
+  
+ 
   

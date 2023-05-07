@@ -3,17 +3,20 @@ import { useParams } from "react-router-dom";
 import { sendMessage, getMessages } from "../../utils/api";
 import { message, Input, List } from "antd";
 import { SendOutlined } from "@ant-design/icons";
-import "./ChatRoom.css";
+import "../../components/Shared/ChatRoom.css"
 
-const ChatRoom = () => {
+const ChatRoomDoctor = () => {
   const [messageInput, setMessageInput] = useState("");
   const [messages, setMessages] = useState([]);
   const { roomId } = useParams();
+  const isDoctor = localStorage.getItem("user_type") === "doctor";
 
   useEffect(() => {
+    console.log(`Loading messages for room: ${roomId}`);
     getMessages(roomId)
-      .then((messages) => {
-        setMessages(messages);
+      .then((response) => {
+        setMessages(response.messages);
+        console.log(response);
       })
       .catch((error) => {
         message.error("Failed to load messages");
@@ -25,14 +28,18 @@ const ChatRoom = () => {
   };
 
   const handleSendMessage = () => {
-    const userId = localStorage.getItem("patient_id") || localStorage.getItem("doctor_id");
-
-    sendMessage(roomId, userId, messageInput)
-      .then(() => {
-        setMessages((prevMessages) => [
-          ...prevMessages,
-          { user_id: userId, message: messageInput },
-        ]);
+    const senderId = localStorage.getItem("doctor_id");
+  
+    const newMessage = {
+      sender_id: senderId,
+      content: messageInput,
+      timestamp: new Date().toISOString()
+    };
+  
+    sendMessage(roomId, messageInput, senderId)
+      .then((response) => {
+        console.log(response);
+        setMessages(response.data.messages);
         setMessageInput("");
       })
       .catch((error) => {
@@ -42,16 +49,16 @@ const ChatRoom = () => {
 
   return (
     <div className="chat-room-container">
-      {messages.length > 0 ? (
+      {messages && messages.length > 0 ? (
         <List
           className="message-list"
           itemLayout="horizontal"
           dataSource={messages}
-          renderItem={(message) => (
-            <List.Item className={message.user_id === localStorage.getItem("patient_id") ? "message-row sent" : "message-row received"}>
+          renderItem={(item) => (
+            <List.Item className={item.sender_id === localStorage.getItem("doctor_id") ? "message-row sent" : "message-row received"}>
               <List.Item.Meta
-                title={message.user_id === localStorage.getItem("patient_id") ? "You" : "Doctor"}
-                description={message.message}
+                title={item.sender_id === localStorage.getItem("doctor_id") ? "You" : item.sender_name}
+                description={item.content}
               />
             </List.Item>
           )}
@@ -78,4 +85,4 @@ const ChatRoom = () => {
   );
 };
 
-export default ChatRoom;
+export default ChatRoomDoctor;

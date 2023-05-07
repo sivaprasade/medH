@@ -58,7 +58,7 @@ const AppointmentsPage = () => {
       });
   };
   const handleChatRoom = (room_id) => {
-    navigate(`/chat/${room_id}`);
+    navigate(`/chat/doctor/${room_id}`);
   };
   return (
     <div style={{ padding: "2rem" }}>

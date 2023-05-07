@@ -76,7 +76,7 @@ const ListAppointmentPage = () => {
   const handleChatRoom = (appointment) => {
     console.log(`Opening chat room for appointment with id: ${appointment._id}`);
     // TODO: Implement the chat room functionality
-    navigate(`/chat/${appointment.room_id}`);
+    navigate(`/chat/patient/${appointment.room_id}`);
     
   };
 

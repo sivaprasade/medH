@@ -292,8 +292,14 @@ export const getAppointmentsByDoctorStatus = async (doctorId) => {
 
 // send message in chat room
 export const sendMessage = async (roomId, message, senderId) => {
+  const payload = {
+    content: message,
+    sender_id: senderId,
+    timestamp: new Date().toISOString()
+  };
+
   try {
-    const response = await axios.post(`${API_URL}/api/chat/${roomId}/send`, message, {
+    const response = await axios.post(`${API_URL}/api/chat/${roomId}/send`, payload, {
       headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
       params: { sender_id: senderId }
     });
@@ -304,10 +310,11 @@ export const sendMessage = async (roomId, message, senderId) => {
   }
 };
 
+
 // get messages in chat room
 export const getMessages = async (roomId) => {
   try {
-    const response = await axios.get(`${API_URL}/api/chat/${roomId}/messages`, {
+    const response = await axios.get(`${API_URL}/api/${roomId}/messages`, {
       headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
     });
     return response.data;

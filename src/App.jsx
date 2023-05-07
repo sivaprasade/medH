@@ -8,11 +8,12 @@ import AppointmentsPage from './Pages/Doctor/AppointmentsPage';
 import AppointmentHomePage from './Pages/Patient/AppointmentHomePage';
 import ListAppointmentPage from './Pages/Patient/ListAppointmentPage';
 import DoctorChatPage from './Pages/Patient/DoctorChatPage';
-import ChatRoom from './Pages/Shared/ChatRoom';
+import ChatRoomPatient from './Pages/Patient/ChatRoomPatient';
 import PatientMedicalRecordHome from './Pages/Patient/PatientMedicalRecordHome';
 import ListMedicalRecords from './Pages/Patient/ListMedicalRecords';
 import MedicalRecordsForDoctor from './Pages/Doctor/MedicalRecordsForDoctor';
 import DoctorChatRoomHome from './Pages/Doctor/DoctorChatRoomHome';
+import ChatRoomDoctor from './Pages/Doctor/ChatRoomDoctor';
 
 function App() {
   return (
@@ -27,11 +28,12 @@ function App() {
         <Route path="/appointment-home" element={<AppointmentHomePage />} />
         <Route path="/patient-appointments" element={<ListAppointmentPage />} />
         <Route path="/chat-home" element={<DoctorChatPage />} />
-        <Route path="/chat/:roomId" element={<ChatRoom />} />
+        <Route path="/chat/patient/:roomId" element={<ChatRoomPatient />} />
         <Route path="/medical-records" element={<PatientMedicalRecordHome />} />
         <Route path="/list-medical-records" element={<ListMedicalRecords />} />
         <Route path="/medical-records-for-doctor" element={<MedicalRecordsForDoctor />} />
         <Route path="/doctor-chat-home" element={<DoctorChatRoomHome />} />
+        <Route path="/chat/doctor/:roomId" element={<ChatRoomDoctor />} />
       </Routes>
     </Router>
   );

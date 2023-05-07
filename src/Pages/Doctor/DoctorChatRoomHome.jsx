@@ -36,7 +36,7 @@ const DoctorChatRoomHome = () => {
                 description={`Appointment Time: ${new Date(appointment.appointment_time).toLocaleString()}`}
               />
               <Button type="primary">
-                <Link to={`/chat/${appointment.room_id}`}>Chat Room</Link>
+                <Link to={`/chat/doctor/${appointment.room_id}`}>Chat Room</Link>
               </Button>
             </List.Item>
           )}

@@ -34,7 +34,7 @@ const DoctorChatPage = () => {
             <List.Item
               key={appointment.id}
               actions={[
-                <Link to={`/chat/${appointment.room_id}`}>
+                <Link to={`/chat/patient/${appointment.room_id}`}>
                   <Button type="primary">Chatroom</Button>
                 </Link>,
               ]}
