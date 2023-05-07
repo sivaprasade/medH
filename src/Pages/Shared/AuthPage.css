@@ -1,0 +1,34 @@
+.auth-page {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    /*background-image: url("https://source.unsplash.com/RtnNjXfcMZU/1920x1080");*/
+    background-size: cover;
+  }
+  
+  .auth-page-content {
+    text-align: center;
+    color: rgb(104, 140, 251);
+    text-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
+  }
+  
+  .auth-page-content h1 {
+    font-size: 4rem;
+    margin-bottom: 2rem;
+  }
+  
+  .auth-page-content p {
+    font-size: 1.2rem;
+    line-height: 1.5;
+    max-width: 640px;
+    margin: 0 auto;
+  }
+  
+  .auth-page-form {
+    background-color: white;
+    border-radius: 8px;
+    padding: 2rem;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  }
+  
