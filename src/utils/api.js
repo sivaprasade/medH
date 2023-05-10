@@ -310,6 +310,47 @@ export const sendMessage = async (roomId, message, senderId) => {
   }
 };
 
+//---------------------- Notification ---------------------- //
+
+// list all notifications
+export const listNotifications = async () => {
+  try {
+    const response = await axios.get(`${API_URL}/api/notifications`, {
+      headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Error listing notifications:", error);
+    return null;
+  }
+};
+
+// list notifications for a particular user
+export const listNotificationsByUser = async (userId) => {
+  try {
+    const response = await axios.get(`${API_URL}/api/notifications/user/${userId}`, {
+      headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Error listing notifications by user:", error);
+    return null;
+  }
+};
+
+// get the count of notifications for a particular user
+export const getNotificationCountByUser = async (userId) => {
+  try {
+    const response = await axios.get(`${API_URL}/api/notifications/user/${userId}/count`, {
+      headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+    });
+    return response.data.count;
+  } catch (error) {
+    console.error("Error getting notification count by user:", error);
+    return 0;
+  }
+};
+
 
 // get messages in chat room
 export const getMessages = async (roomId) => {

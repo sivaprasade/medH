@@ -1,16 +1,16 @@
-import React, { useEffect , useState} from "react";
-import { Button, Col, Row, message, Typography } from "antd";
+import React, { useEffect, useState } from "react";
+import { Button, Col, Row, message, Typography, Popover, Badge } from "antd";
 import {
   WechatOutlined,
   LogoutOutlined,
   ScheduleOutlined,
   FileOutlined,
-  
+  BellOutlined,
 } from "@ant-design/icons";
-import { logout_user } from "../../utils/api"; // Import the API function
+import { logout_user, getNotificationCountByUser } from "../../utils/api"; // Import the API function
 import { useNavigate } from "react-router-dom";
-import WithAuth from "../../context/withAuth";
 import ChatInterface from "../../components/Patient/ChatInterface";
+import Notification from "../../components/Patient/Notification";
 
 const { Title, Paragraph } = Typography;
 
@@ -54,8 +54,49 @@ const PatientHomePage = () => {
     }
   };
 
+  const [visible, setVisible] = useState(false);
+  const [notificationCount, setNotificationCount] = useState(0);
+
+  useEffect(() => {
+    const fetchNotificationCount = async () => {
+      const countResponse = await getNotificationCountByUser(userId);
+      console.log("countResponse:", countResponse); // Debugging statement
+      if (countResponse && countResponse.count) {
+        setNotificationCount(countResponse.count);
+      }
+    };
+    fetchNotificationCount();
+  }, [userId]);
+
+  const handleVisibleChange = async (visible) => {
+    setVisible(visible);
+    if (visible) {
+      const countResponse = await getNotificationCountByUser(userId);
+      console.log("countResponse:", countResponse); // Debugging statement
+      if (countResponse && countResponse.count) {
+        setNotificationCount(countResponse.count);
+      }
+    } else {
+      setNotificationCount(0);
+    }
+  };
+
+  console.log("notificationCount:", notificationCount); // Debugging statement
+
+
   return (
     <div style={{ padding: "2rem" }}>
+      <Popover
+        content={<Notification />}
+        trigger="click"
+        visible={visible}
+        onVisibleChange={handleVisibleChange}
+        placement="bottomRight"
+      >
+        <Badge count={notificationCount}>
+          <BellOutlined style={{ fontSize: "24px" }} />
+        </Badge>
+      </Popover>
       <Row justify="space-between">
         <Col>
           <Typography>

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Modal, Input, Button } from "antd";
+import { Modal, Input, Button, Checkbox } from "antd";
 import { WechatOutlined } from "@ant-design/icons";
 import "./ChatInterface.css";
 
@@ -7,6 +7,10 @@ const ChatInterface = () => {
   const [visible, setVisible] = useState(false);
   const [inputValue, setInputValue] = useState("");
   const [chatHistory, setChatHistory] = useState([]);
+  const [showSymptoms, setShowSymptoms] = useState(false);
+  const [selectedSymptoms, setSelectedSymptoms] = useState([]);
+
+  const symptoms = ["Symptom 1", "Symptom 2", "Symptom 3"];
 
   const handleOk = () => {
     if (inputValue.trim() !== "") {
@@ -20,12 +24,7 @@ const ChatInterface = () => {
         };
         setChatHistory([...chatHistory, botMessage]);
       } else if (inputValue === "!predict-my-disease" || inputValue === "!predict") {
-        const botMessage = {
-          sender: "chatbot",
-          message: "Please choose your symptoms:",
-          symptoms: ["Symptom 1", "Symptom 2", "Symptom 3"],
-        };
-        setChatHistory([...chatHistory, botMessage]);
+        setShowSymptoms(true);
       } else if (inputValue === "!help") {
         const botMessage = {
           sender: "chatbot",
@@ -46,6 +45,53 @@ const ChatInterface = () => {
     setInputValue("");
     setVisible(false);
   };
+
+  const handleSymptomChange = (checkedValues) => {
+    setSelectedSymptoms(checkedValues);
+  };
+
+  const handleSubmitSymptoms = async () => {
+    if (selectedSymptoms.length >= 3) {
+      // Call the API and pass the selected symptoms
+      // const response = await callApi(selectedSymptoms);
+
+      // Mock API response
+      const response = { disease: "Sample Disease" };
+
+      const botMessage = {
+        sender: "chatbot",
+        message: `Based on your symptoms, you may have ${response.disease}. Please consult a doctor for a proper diagnosis.`,
+      };
+      setChatHistory([...chatHistory, botMessage]);
+      setShowSymptoms(false);
+    }
+  };
+
+  const renderSymptomsSelection = () => {
+    return (
+      <Modal
+        title="Select Your Symptoms"
+        visible={showSymptoms}
+        onOk={handleSubmitSymptoms}
+        onCancel={() => setShowSymptoms(false)}
+        footer={[
+          <Button key="back" onClick={() => setShowSymptoms(false)}>
+            Cancel
+          </Button>,
+          <Button key="submit" type="primary" onClick={handleSubmitSymptoms}>
+            Submit
+          </Button>,
+        ]}
+      >
+        <Checkbox.Group
+          options={symptoms}
+          value={selectedSymptoms}
+          onChange={handleSymptomChange}
+        />
+      </Modal>
+    );
+  };
+
 
   return (
     <>
@@ -99,6 +145,7 @@ const ChatInterface = () => {
           />
         </div>
       </Modal>
+      {renderSymptomsSelection()}
     </>
   );
 };
