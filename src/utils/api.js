@@ -118,17 +118,16 @@ export const getDoctorById = async (doctorId) => {
 // ---------------------- chatbot ---------------------- //
 
 //gpt prediction
-export const gptPrediction = async (symptoms) => {
+export const diseasePrediction = async (requestBody) => {
   try {
-    const response = await axios.post(`${API_URL}/api/gpt-prediction`, {
-      symptoms,
-    });
+    const response = await axios.post(`${API_URL}/api/disease-prediction`, requestBody);
     return response.data;
   } catch (error) {
-    console.error("Error during GPT prediction:", error);
+    console.error("Error during disease prediction:", error);
     return null;
   }
 };
+
 
 // chatbot message
 export const chatbotMessage = async (text) => {

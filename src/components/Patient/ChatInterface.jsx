@@ -1,7 +1,9 @@
 import React, { useState } from "react";
-import { Modal, Input, Button, Checkbox } from "antd";
+import { Modal, Input, Button, Checkbox, Row, Col } from "antd";
 import { WechatOutlined } from "@ant-design/icons";
+import listOfSymptoms from "./listOfSymtoms";
 import "./ChatInterface.css";
+import { diseasePrediction } from "../../utils/api";
 
 const ChatInterface = () => {
   const [visible, setVisible] = useState(false);
@@ -10,11 +12,15 @@ const ChatInterface = () => {
   const [showSymptoms, setShowSymptoms] = useState(false);
   const [selectedSymptoms, setSelectedSymptoms] = useState([]);
 
-  const symptoms = ["Symptom 1", "Symptom 2", "Symptom 3"];
+  const symptoms = listOfSymptoms
 
   const handleOk = () => {
     if (inputValue.trim() !== "") {
-      const userMessage = { sender: "user", message: inputValue, displayed: false };
+      const userMessage = {
+        sender: "user",
+        message: inputValue,
+        displayed: false,
+      };
       setChatHistory([...chatHistory, userMessage]);
       setInputValue("");
       if (inputValue === "!hi") {
@@ -23,12 +29,16 @@ const ChatInterface = () => {
           message: "Hey, I'm medH! For help, type !help to see my functions.",
         };
         setChatHistory([...chatHistory, botMessage]);
-      } else if (inputValue === "!predict-my-disease" || inputValue === "!predict") {
+      } else if (
+        inputValue === "!predict-my-disease" ||
+        inputValue === "!predict"
+      ) {
         setShowSymptoms(true);
       } else if (inputValue === "!help") {
         const botMessage = {
           sender: "chatbot",
-          message: "Here are my functions:\n!hi - to greet me\n!predict-my-disease or !predict - to predict your disease based on your symptoms\n!help - to see my functions",
+          message:
+            "Here are my functions:\n!hi - to greet me\n!predict-my-disease or !predict - to predict your disease based on your symptoms\n!help - to see my functions",
         };
         setChatHistory([...chatHistory, botMessage]);
       } else {
@@ -53,21 +63,23 @@ const ChatInterface = () => {
   const handleSubmitSymptoms = async () => {
     if (selectedSymptoms.length >= 3) {
       // Call the API and pass the selected symptoms
-      // const response = await callApi(selectedSymptoms);
-
-      // Mock API response
-      const response = { disease: "Sample Disease" };
-
+      const requestBody = { symptoms: selectedSymptoms };
+      const response = await diseasePrediction(requestBody);
+  
       const botMessage = {
         sender: "chatbot",
-        message: `Based on your symptoms, you may have ${response.disease}. Please consult a doctor for a proper diagnosis.`,
+        message: `Based on your symptoms, you may have ${response.disease_prediction}. Please consult a doctor for a proper diagnosis.`,
       };
       setChatHistory([...chatHistory, botMessage]);
       setShowSymptoms(false);
     }
   };
+  
 
   const renderSymptomsSelection = () => {
+    const columns = 5;
+    const numRows = Math.ceil(symptoms.length / columns);
+  
     return (
       <Modal
         title="Select Your Symptoms"
@@ -84,14 +96,21 @@ const ChatInterface = () => {
         ]}
       >
         <Checkbox.Group
-          options={symptoms}
           value={selectedSymptoms}
           onChange={handleSymptomChange}
-        />
+          style={{ width: "100%" }}
+        >
+          <Row gutter={[16, 16]}>
+            {symptoms.map((symptom, index) => (
+              <Col key={index} span={24 / columns}>
+                <Checkbox value={symptom}>{symptom}</Checkbox>
+              </Col>
+            ))}
+          </Row>
+        </Checkbox.Group>
       </Modal>
     );
   };
-
 
   return (
     <>
@@ -121,7 +140,12 @@ const ChatInterface = () => {
           {chatHistory.map((chat, index) => {
             if (chat.sender === "user") {
               return (
-                <div className={`message sent ${chat.displayed ? 'displayed' : ''}`} key={index}>
+                <div
+                  className={`message sent ${
+                    chat.displayed ? "displayed" : ""
+                  }`}
+                  key={index}
+                >
                   {chat.message}
                 </div>
               );
@@ -129,9 +153,10 @@ const ChatInterface = () => {
               return (
                 <div className="message received" key={index}>
                   {chat.message}
-                  {chat.symptoms && chat.symptoms.map((symptom, index) => (
-                    <div key={index}>{symptom}</div>
-                  ))}
+                  {chat.symptoms &&
+                    chat.symptoms.map((symptom, index) => (
+                      <div key={index}>{symptom}</div>
+                    ))}
                 </div>
               );
             }
