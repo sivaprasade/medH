@@ -1,11 +1,14 @@
 import React,{useState} from "react";
-import { List, Button, message } from "antd";
+import { List, Button, message, Typography } from "antd";
 import { DownloadOutlined } from "@ant-design/icons";
 import { getMedicalFiles, downloadMedicalFile } from "../../utils/api"
+
+const { Title, Paragraph } = Typography;
 
 const ListMedicalRecords = () => {
   const [files, setFiles] = useState([]);
   const userId = localStorage.getItem("patient_id");
+  
   const fetchFiles = async () => {
     const result = await getMedicalFiles(userId);
     if (result) {
@@ -36,6 +39,14 @@ const ListMedicalRecords = () => {
 
   return (
     <div>
+      <Typography>
+        <Title level={1}>Medical Records</Title>
+        <Paragraph>
+          Storing medical records digitally brings a multitude of benefits. It ensures the data is safely kept and easily accessible for future reference. 
+          Digital storage allows for seamless sharing of information between medical professionals which aids in providing coordinated and efficient healthcare. 
+          It also empowers patients to actively participate in their healthcare journey. Here, you can download your medical records.
+        </Paragraph>
+      </Typography>
       <List
         dataSource={files}
         renderItem={(item) => (

@@ -1,10 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { getAcceptedAppointmentsByUserId } from "../../utils/api";
-import { List, message, Button } from "antd";
-import { Link } from "react-router-dom";
+import { List, message, Button,Typography } from "antd";
+import { useNavigate } from "react-router-dom";
+
+const { Title, Paragraph } = Typography;
 
 const DoctorChatPage = () => {
   const [appointments, setAppointments] = useState([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const patientId = localStorage.getItem("patient_id");
@@ -16,14 +19,22 @@ const DoctorChatPage = () => {
         message.error("Failed to load appointments");
       });
   }, []);
+  const handleChatRoom = (appointment) => {
+    console.log(`Opening chat room for appointment with id: ${appointment._id}`);
+    // TODO: Implement the chat room functionality
+    navigate(`/chat/patient/${appointment.room_id}`, { state: { doctorName: appointment.doctorname }});
+    
+  };
 
   return (
     <div style={{ padding: "2rem" }}>
-      <h1>Accepted Appointments</h1>
-      <p>
+      <Typography>
+        <Title level={1}>Accepted Appointments</Title>
+        <Paragraph>
         This is an online consultation. Each chatroom has a unique code so that
         it can only be accessed by the user and the particular doctor.
-      </p>
+        </Paragraph>
+      </Typography>
       {appointments && appointments.length === 0 ? (
         <p>No accepted appointments yet</p>
       ) : (
@@ -34,9 +45,7 @@ const DoctorChatPage = () => {
             <List.Item
               key={appointment.id}
               actions={[
-                <Link to={`/chat/patient/${appointment.room_id}`}>
-                  <Button type="primary">Chatroom</Button>
-                </Link>,
+                  <Button key="chat" type="primary" onClick={() => handleChatRoom(appointment)}>Chatroom</Button>
               ]}
             >
               <List.Item.Meta
