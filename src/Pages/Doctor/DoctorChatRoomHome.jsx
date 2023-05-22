@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { Card, Button, List, message } from "antd";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { getAppointmentsByDoctorStatus } from "../../utils/api";
 
 const DoctorChatRoomHome = () => {
   const [appointments, setAppointments] = useState([]);
   const doctor_id = localStorage.getItem("doctor_id");
+  const navigate = useNavigate();
 
   useEffect(() => {
     async function fetchData() {
@@ -19,6 +20,10 @@ const DoctorChatRoomHome = () => {
     }
     fetchData();
   }, []);
+
+  const handleChatRoom = (room_id, username) => {
+    navigate(`/chat/doctor/${room_id}`, { state: { username } });
+  };
 
   return (
     <div className="site-card-border-less-wrapper">
@@ -35,8 +40,8 @@ const DoctorChatRoomHome = () => {
                 title={appointment.username}
                 description={`Appointment Time: ${new Date(appointment.appointment_time).toLocaleString()}`}
               />
-              <Button type="primary">
-                <Link to={`/chat/doctor/${appointment.room_id}`}>Chat Room</Link>
+              <Button type="primary" onClick={() => handleChatRoom(appointment.room_id, appointment.username)}>
+                  Chat Room
               </Button>
             </List.Item>
           )}

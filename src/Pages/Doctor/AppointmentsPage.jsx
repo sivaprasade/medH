@@ -4,8 +4,10 @@ import {
   acceptAppointment,
   rejectAppointment,
 } from "../../utils/api";
-import { Button, List, message } from "antd";
+import { Button, List, message, Typography } from "antd";
 import { useNavigate } from "react-router-dom";
+
+const { Title, Paragraph } = Typography;
 
 const AppointmentsPage = () => {
   const [appointments, setAppointments] = useState([]);
@@ -57,14 +59,21 @@ const AppointmentsPage = () => {
         message.error("Failed to reject appointment");
       });
   };
-  const handleChatRoom = (room_id) => {
-    navigate(`/chat/doctor/${room_id}`);
+
+  const handleChatRoom = (room_id, username) => {
+    navigate(`/chat/doctor/${room_id}`, { state: { username } });
   };
+
   return (
     <div style={{ padding: "2rem" }}>
-      <h1>Appointments</h1>
+      <Typography>
+        <Title level={1}>Appointments</Title>
+        <Paragraph>
+          Here, you can manage all your appointments. Accept or reject appointments and communicate with patients through the chatroom.
+        </Paragraph>
+      </Typography>
       {appointments && appointments.length === 0 ? (
-        <p>No appointments yet</p>
+        <Paragraph>No appointments yet</Paragraph>
       ) : (
         <List
           itemLayout="horizontal"
@@ -78,7 +87,7 @@ const AppointmentsPage = () => {
                       <div style={{ color: "green" }}>Accepted</div>,
                       <Button
                         type="primary"
-                        onClick={() => handleChatRoom(appointment.room_id)}
+                        onClick={() => handleChatRoom(appointment.room_id, appointment.username)}
                       >
                         Chatroom
                       </Button>,

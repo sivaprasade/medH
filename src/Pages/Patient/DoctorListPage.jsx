@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from "react";
-import { Button, List, message } from "antd";
+import { Button, List, message, Typography } from "antd";
 import {
   getDoctors,
   bookAppointment,
   getAppointmentsByDoctorId,
 } from "../../utils/api";
 import AppointmentForm from "../../components/Patient/AppointmentForm";
+
+const { Title, Paragraph } = Typography;
 
 const DoctorListPage = () => {
   const [doctors, setDoctors] = useState([]);
@@ -82,14 +84,14 @@ const DoctorListPage = () => {
 
   return (
     <div >
-      <h1>Available Doctors</h1>
-      <p>
-        Online consultation with doctors has both advantages and disadvantages.
+      <Typography>
+        <Title level={1}>Available Doctors</Title>
+        <Paragraph>Online consultation with doctors has both advantages and disadvantages.
         It is convenient and time-saving as it eliminates the need to travel to
         the doctor's clinic. However, it may not be suitable for certain medical
         conditions that require physical examination. Always consult your doctor
-        before opting for online consultation.
-      </p>
+        before opting for online consultation.</Paragraph>
+      </Typography>
       {doctors.length > 0 ? (
         <List
           dataSource={doctors}

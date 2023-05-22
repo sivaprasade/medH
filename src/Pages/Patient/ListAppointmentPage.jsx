@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { Button, List, message } from "antd";
+import { Button, List, message,Typography } from "antd";
 import { deleteAppointment, editAppointment, listAppointmentsByUserId } from "../../utils/api";
 import AppointmentForm from "../../components/Patient/AppointmentForm";
 import { useNavigate } from "react-router-dom";
+
+const { Title, Paragraph } = Typography;
 
 const ListAppointmentPage = () => {
   const [appointments, setAppointments] = useState([]);
@@ -76,12 +78,21 @@ const ListAppointmentPage = () => {
   const handleChatRoom = (appointment) => {
     console.log(`Opening chat room for appointment with id: ${appointment._id}`);
     // TODO: Implement the chat room functionality
-    navigate(`/chat/patient/${appointment.room_id}`);
+    navigate(`/chat/patient/${appointment.room_id}`, { state: { doctorName: appointment.doctorname }});
     
   };
 
   return (
     <div >
+      <Typography>
+        <Title level={1}>Your Appointments</Title>
+        <Paragraph>
+        Online consultations offer a range of advantages such as convenience, accessibility, and the 
+        ability to access specialists from any location. However, they also have some disadvantages. 
+        These can include lack of physical examination, potential miscommunications, and technological issues 
+        that could impact the quality of care.
+        </Paragraph>
+      </Typography>
       {appointments.length > 0 ? (
         <List
           dataSource={appointments}
