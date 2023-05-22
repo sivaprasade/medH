@@ -1,11 +1,9 @@
 import React, { useState, useEffect } from "react";
-import { useParams,useLocation } from "react-router-dom";
+import { useParams, useLocation } from "react-router-dom";
 import { sendMessage, getMessages } from "../../utils/api";
-import { message, Input, List ,Typography} from "antd";
+import { message, Input, List, Card } from "antd";
 import { SendOutlined } from "@ant-design/icons";
 import "../../components/Shared/ChatRoom.css"
-
-const { Title, Paragraph } = Typography;
 
 const ChatRoomPatient = () => {
   const [messageInput, setMessageInput] = useState("");
@@ -52,41 +50,40 @@ const ChatRoomPatient = () => {
 
   return (
     <div className="chat-room-container">
-      <Typography>
-        <Title>Chat with {doctorName}</Title>
-      </Typography>
-      {messages && messages.length > 0 ? (
-        <List
-          className="message-list"
-          itemLayout="horizontal"
-          dataSource={messages}
-          renderItem={(item) => (
-            <List.Item className={item.sender_id === localStorage.getItem("patient_id") ? "message-row sent" : "message-row received"}>
-              <List.Item.Meta
-                title={item.sender_id === localStorage.getItem("patient_id") ? "You" : item.sender_name}
-                description={item.content}
+      <Card title={`Chat with ${doctorName}`} bordered={false}>
+        {messages && messages.length > 0 ? (
+          <List
+            className="message-list"
+            itemLayout="horizontal"
+            dataSource={messages}
+            renderItem={(item) => (
+              <List.Item className={item.sender_id === localStorage.getItem("patient_id") ? "message-row sent" : "message-row received"}>
+                <List.Item.Meta
+                  title={item.sender_id === localStorage.getItem("patient_id") ? "You" : item.sender_name}
+                  description={item.content}
+                />
+              </List.Item>
+            )}
+          />
+        ) : (
+          <div className="no-messages-container">
+            <p>No messages yet</p>
+          </div>
+        )}
+        <div className="chat-input-container">
+          <Input
+            placeholder="Type a message..."
+            value={messageInput}
+            onChange={handleInputChange}
+            suffix={
+              <SendOutlined
+                onClick={handleSendMessage}
+                style={{ fontSize: "24px", color: "#08c" }}
               />
-            </List.Item>
-          )}
-        />
-      ) : (
-        <div className="no-messages-container">
-          <p>No messages yet</p>
+            }
+          />
         </div>
-      )}
-      <div className="chat-input-container">
-        <Input
-          placeholder="Type a message..."
-          value={messageInput}
-          onChange={handleInputChange}
-          suffix={
-            <SendOutlined
-              onClick={handleSendMessage}
-              style={{ fontSize: "24px", color: "#08c" }}
-            />
-          }
-        />
-      </div>
+      </Card>
     </div>
   );
 };
