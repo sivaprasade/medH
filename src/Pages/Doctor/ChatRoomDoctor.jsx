@@ -1,17 +1,23 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useLocation } from "react-router-dom";
-import { sendMessage, getMessages } from "../../utils/api";
-import { message, Input, List, Card } from "antd";
-import { SendOutlined } from "@ant-design/icons";
+import { sendMessage, getMessages, addPrescription } from "../../utils/api";
+import { message, Input, List, Card, Button, Modal, Form, Alert } from "antd";
+import { SendOutlined, PlusOutlined } from "@ant-design/icons";
 import "../../components/Shared/ChatRoom.css"
 
 const ChatRoomDoctor = () => {
   const [messageInput, setMessageInput] = useState("");
   const [messages, setMessages] = useState([]);
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [form] = Form.useForm();
   const { roomId } = useParams();
-  const isDoctor = localStorage.getItem("user_type") === "doctor";
   const location = useLocation();
   const username = location.state ? location.state.username : "Patient";
+  const user_id = location.state.user_id;
+  const doctorName = localStorage.getItem("doctor_name");
+  const doctorId = localStorage.getItem("doctor_id");
+
+  console.log(location.state); 
 
   useEffect(() => {
     console.log(`Loading messages for room: ${roomId}`);
@@ -31,13 +37,13 @@ const ChatRoomDoctor = () => {
 
   const handleSendMessage = () => {
     const senderId = localStorage.getItem("doctor_id");
-  
+
     const newMessage = {
       sender_id: senderId,
       content: messageInput,
       timestamp: new Date().toISOString()
     };
-  
+
     sendMessage(roomId, messageInput, senderId)
       .then((response) => {
         console.log(response);
@@ -49,9 +55,51 @@ const ChatRoomDoctor = () => {
       });
   };
 
+  const handleAddPrescription = () => {
+    setIsModalVisible(true);
+  };
+
+  const handleOk = () => {
+    form
+      .validateFields()
+      .then((values) => {
+        const { symptoms, prescription,disease_name } = values;
+        addPrescription({
+          user_id,
+          doctor_id: doctorId,
+          username,
+          doctor_name: doctorName,
+          symptoms,
+          prescription,
+          disease_name,
+          status: true
+        })
+          .then((response) => {
+            setIsModalVisible(false);
+            message.success("Prescription added successfully");
+            form.resetFields();
+          })
+          .catch((error) => {
+            message.error("Failed to add prescription");
+          });
+      })
+      .catch((info) => {
+        console.log('Validate Failed:', info);
+      });
+  };
+  
+
+  const handleCancel = () => {
+    setIsModalVisible(false);
+  };
+
   return (
     <div className="chat-room-container">
-      <Card title={`Chat with ${username}`} bordered={false}>
+      <Card title={"ChatRoom"} bordered={false}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1em' }}>
+          <h2>{`Chat with ${username}`}</h2>
+          <Button type="primary" onClick={handleAddPrescription}>Add Prescription</Button>
+        </div>
         {messages && messages.length > 0 ? (
           <List
             className="message-list"
@@ -84,6 +132,45 @@ const ChatRoomDoctor = () => {
             }
           />
         </div>
+        <Modal title="Add Prescription" visible={isModalVisible} onOk={handleOk} onCancel={handleCancel}>
+          <Form form={form} layout="vertical" name="form_in_modal">
+            
+            <Form.List name="symptoms">
+              {(fields, { add, remove }) => (
+                <>
+                  {fields.map(field => (
+                    <Form.Item
+                      {...field}
+                      label="Symptom"
+                      rules={[{ required: true, message: 'Missing symptom' }]}
+                    >
+                      <Input />
+                    </Form.Item>
+                  ))}
+                  <Form.Item>
+                    <Button type="dashed" onClick={() => add()} block icon={<PlusOutlined />}>
+                      Add symptom
+                    </Button>
+                  </Form.Item>
+                </>
+              )}
+            </Form.List>
+            <Form.Item
+              name="disease_name"
+              label="Disease Name"
+              rules={[{ required: true, message: 'Please input the Disease Name!' }]}
+            >
+              <Input />
+            </Form.Item>
+            <Form.Item
+              name="prescription"
+              label="Prescription"
+              rules={[{ required: true, message: 'Please input the prescription!' }]}
+            >
+              <Input />
+            </Form.Item>
+          </Form>
+        </Modal>
       </Card>
     </div>
   );
