@@ -21,8 +21,8 @@ const DoctorChatRoomHome = () => {
     fetchData();
   }, []);
 
-  const handleChatRoom = (room_id, username) => {
-    navigate(`/chat/doctor/${room_id}`, { state: { username } });
+  const handleChatRoom = (room_id, username,) => {
+    navigate(`/chat/doctor/${room_id}`, { state: { username,user_id } });
   };
 
   return (
@@ -40,7 +40,7 @@ const DoctorChatRoomHome = () => {
                 title={appointment.username}
                 description={`Appointment Time: ${new Date(appointment.appointment_time).toLocaleString()}`}
               />
-              <Button type="primary" onClick={() => handleChatRoom(appointment.room_id, appointment.username)}>
+              <Button type="primary" onClick={() => handleChatRoom(appointment.room_id, appointment.username,appointment.user_id)}>
                   Chat Room
               </Button>
             </List.Item>

@@ -22,7 +22,7 @@ const DoctorChatPage = () => {
   const handleChatRoom = (appointment) => {
     console.log(`Opening chat room for appointment with id: ${appointment._id}`);
     // TODO: Implement the chat room functionality
-    navigate(`/chat/patient/${appointment.room_id}`, { state: { doctorName: appointment.doctorname }});
+    navigate(`/chat/patient/${appointment.room_id}`, { state: { doctorName: appointment.doctorname, doctor_id : appointment.doctor_id }});
     
   };
 

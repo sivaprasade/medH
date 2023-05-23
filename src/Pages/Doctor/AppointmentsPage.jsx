@@ -60,8 +60,8 @@ const AppointmentsPage = () => {
       });
   };
 
-  const handleChatRoom = (room_id, username) => {
-    navigate(`/chat/doctor/${room_id}`, { state: { username } });
+  const handleChatRoom = (room_id, username, user_id) => {
+    navigate(`/chat/doctor/${room_id}`, { state: { username , user_id} });
   };
 
   return (
@@ -87,7 +87,7 @@ const AppointmentsPage = () => {
                       <div style={{ color: "green" }}>Accepted</div>,
                       <Button
                         type="primary"
-                        onClick={() => handleChatRoom(appointment.room_id, appointment.username)}
+                        onClick={() => handleChatRoom(appointment.room_id, appointment.username, appointment.user_id)}
                       >
                         Chatroom
                       </Button>,

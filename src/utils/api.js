@@ -481,3 +481,54 @@ export const downloadMedicalFile = async (userId, fileId, filename) => {
     console.error("Error downloading medical file:", error);
   }
 };
+
+// ---------------------- prescriptions ---------------------- //
+
+// add prescription
+export const addPrescription = async (prescription) => {
+  try {
+    const response = await axios.post(
+      `${API_URL}/api/prescriptions`,
+      prescription
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error during adding prescription:", error);
+    return null;
+  }
+};
+
+// get prescriptions
+export const getPrescriptions = async (doctor_id) => {
+  try {
+    const response = await axios.get(
+      `${API_URL}/api/prescriptions/${doctor_id}`
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error during getting prescriptions:", error);
+    return null;
+  }
+};
+
+// Download prescription
+export const downloadPrescription = async (prescription_id) => {
+  try {
+    const response = await axios.get(
+      `${API_URL}/api/download_prescription/${prescription_id}`, 
+      { responseType: 'blob' }  // responseType is important here, it tells axios to return binary data
+    );
+
+    // Create a blob URL from the binary data and initiate a download
+    const url = window.URL.createObjectURL(new Blob([response.data]));
+    const link = document.createElement('a');
+    link.href = url;
+    link.setAttribute('download', `prescription_${prescription_id}.pdf`);
+    document.body.appendChild(link);
+    link.click();
+
+  } catch (error) {
+    console.error("Error during prescription download:", error);
+    return null;
+  }
+};
