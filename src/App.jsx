@@ -14,6 +14,9 @@ import ListMedicalRecords from './Pages/Patient/ListMedicalRecords';
 import MedicalRecordsForDoctor from './Pages/Doctor/MedicalRecordsForDoctor';
 import DoctorChatRoomHome from './Pages/Doctor/DoctorChatRoomHome';
 import ChatRoomDoctor from './Pages/Doctor/ChatRoomDoctor';
+import LIfeStyleHome from './Pages/Shared/LIfeStyleHome';
+import LiverDiseasePrediction from './Pages/Shared/LiverDiseasePrediction';
+import HeartDiseasePrediction from './Pages/Shared/HeartDiseasePrediction';
 
 function App() {
   return (
@@ -34,6 +37,9 @@ function App() {
         <Route path="/medical-records-for-doctor" element={<MedicalRecordsForDoctor />} />
         <Route path="/doctor-chat-home" element={<DoctorChatRoomHome />} />
         <Route path="/chat/doctor/:roomId" element={<ChatRoomDoctor />} />
+        <Route path='/life-style' element={<LIfeStyleHome/>}/>
+        <Route path='/life-style-liver' element={<LiverDiseasePrediction/>}/>
+        <Route path='/life-style-heart' element={<HeartDiseasePrediction/>}/>
       </Routes>
     </Router>
   );

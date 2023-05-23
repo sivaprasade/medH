@@ -14,6 +14,24 @@ const ChatInterface = () => {
 
   const symptoms = listOfSymptoms
 
+  const getUserLocation = () => {
+    return new Promise((resolve, reject) => {
+        if (!navigator.geolocation) {
+            reject(new Error('Geolocation is not supported by your browser.'));
+        } else {
+            navigator.geolocation.getCurrentPosition((position) => {
+                resolve({
+                    lat: position.coords.latitude,
+                    lng: position.coords.longitude
+                });
+            }, () => {
+                reject(new Error('Unable to retrieve your location.'));
+            });
+        }
+    });
+};
+
+
   const handleOk = () => {
     if (inputValue.trim() !== "") {
       const userMessage = {
@@ -59,22 +77,27 @@ const ChatInterface = () => {
   const handleSymptomChange = (checkedValues) => {
     setSelectedSymptoms(checkedValues);
   };
-
-  const handleSubmitSymptoms = async () => {
+const handleSubmitSymptoms = async () => {
     if (selectedSymptoms.length >= 3) {
-      // Call the API and pass the selected symptoms
-      const requestBody = { symptoms: selectedSymptoms };
-      const response = await diseasePrediction(requestBody);
-  
-      const botMessage = {
-        sender: "chatbot",
-        message: `Based on your symptoms, you may have ${response.disease_prediction}. Please consult a doctor for a proper diagnosis.`,
-      };
-      setChatHistory([...chatHistory, botMessage]);
-      setShowSymptoms(false);
+        // Get user's current location
+        try {
+            const location = await getUserLocation();
+            // Call the API and pass the selected symptoms and user's current location
+            const requestBody = { symptoms: selectedSymptoms, location };
+            const response = await diseasePrediction(requestBody);
+    
+            const botMessage = {
+                sender: "chatbot",
+                message: `Based on your symptoms, you may have ${response.disease_prediction}. Please consult a doctor for a proper diagnosis.`,
+            };
+            setChatHistory([...chatHistory, botMessage]);
+            setShowSymptoms(false);
+        } catch (error) {
+            console.error('Error getting user location:', error);
+            // Handle the error...
+        }
     }
-  };
-  
+};
 
   const renderSymptomsSelection = () => {
     const columns = 5;
