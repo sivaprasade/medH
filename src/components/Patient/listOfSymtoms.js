@@ -131,6 +131,9 @@ const listOfSymptoms = [
     "blister",
     "red_sore_around_nose",
     "yellow_crust_ooze",
+    "body_pain",
+    "Head_ache",
+    "cold"
   ].map(symptom => symptom.replace(/_/g, ' '));
 
 
