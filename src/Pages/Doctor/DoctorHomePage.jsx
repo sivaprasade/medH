@@ -5,6 +5,7 @@ import {
   WechatOutlined,
   FileOutlined,
   LogoutOutlined,
+  SolutionOutlined
 } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
 import { logout_doctor } from "../../utils/api";
@@ -51,6 +52,10 @@ const DoctorHomePage = ({ token }) => {
     }
   };
 
+  const handlelifestyledisease = ()=>{
+    navigate("/life-style")
+  }
+
   return (
     <div style={{ padding: "2rem" }}>
       <Typography>
@@ -96,6 +101,15 @@ const DoctorHomePage = ({ token }) => {
             Medical Records
           </Button>
         </Col>
+        <Col span={24}>
+          <Button
+            type="primary"
+            icon={<SolutionOutlined />}
+            onClick={handlelifestyledisease}
+          >
+            Life Style Disease Prediction
+          </Button>
+          </Col>
         <Col span={24}>
           <Button
             type="primary"
