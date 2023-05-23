@@ -577,12 +577,3 @@ export const predictLiverDisease = async (data) => {
   }
 };
 
-export const predictKidneyDisease = async (data) => {
-  try {
-    const response = await axios.post(`${API_URL}/api/predict_kidney`, data);
-    return response.data;
-  } catch (error) {
-    console.error("Error during kidney disease prediction:", error);
-    return null;
-  }
-};

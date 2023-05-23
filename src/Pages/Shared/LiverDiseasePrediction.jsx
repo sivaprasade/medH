@@ -1,6 +1,6 @@
 import React from 'react';
 import { Form, InputNumber, Button, message, Typography, Card } from 'antd';
-import { predictLiverDisease } from "../../utils/api"
+//import { predictLiverDisease } from "../../utils/api"
 
 const { Title, Paragraph } = Typography;
 

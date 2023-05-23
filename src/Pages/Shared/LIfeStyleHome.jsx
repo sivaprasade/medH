@@ -5,12 +5,23 @@ import { useNavigate } from 'react-router-dom';
 
 const LifeStyleHome = () => {
     const navigate = useNavigate();
+
     const handleLiver =()=>{
         navigate("/life-style-liver")
     }
+
     const handleHeart=()=>{
         navigate("/life-style-heart")
     }
+
+    const handleDiabetes=()=>{
+        navigate("/life-style-diabetes")
+    }
+
+    const handleCancer=()=>{
+        navigate("/cancer")
+    }
+
   return (
     <div className="lifestyle-home">
       <Card title="Lifestyle Diseases" style={{  margin: '20px auto' }}>
@@ -46,9 +57,8 @@ const LifeStyleHome = () => {
 
         <Button type="primary" onClick={handleLiver} style={{ margin: '10px' }}>Liver Disease Prediction</Button>
         <Button type="primary" onClick={handleHeart} style={{ margin: '10px' }}>Heart Disease Prediction</Button>
-        <Button type="primary" style={{ margin: '10px' }}>Diabetes Prediction</Button>
-        <Button type="primary" style={{ margin: '10px' }}>Kidney Disease Prediction</Button>
-        <Button type="primary" style={{ margin: '10px' }}>Cancer Prediction</Button>
+        <Button type="primary" onClick={handleDiabetes} style={{ margin: '10px' }}>Diabetes Prediction</Button>
+        <Button type="primary" onClick={handleCancer} style={{ margin: '10px' }}>Cancer Prediction</Button>
       </Card>
     </div>
   );

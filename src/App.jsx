@@ -17,6 +17,9 @@ import ChatRoomDoctor from './Pages/Doctor/ChatRoomDoctor';
 import LIfeStyleHome from './Pages/Shared/LIfeStyleHome';
 import LiverDiseasePrediction from './Pages/Shared/LiverDiseasePrediction';
 import HeartDiseasePrediction from './Pages/Shared/HeartDiseasePrediction';
+import DiabetesPrediction from './Pages/Shared/DiabetesPrediction';
+import CancerPrediction from './Pages/Shared/CancerPrediction';
+
 
 function App() {
   return (
@@ -40,6 +43,8 @@ function App() {
         <Route path='/life-style' element={<LIfeStyleHome/>}/>
         <Route path='/life-style-liver' element={<LiverDiseasePrediction/>}/>
         <Route path='/life-style-heart' element={<HeartDiseasePrediction/>}/>
+        <Route path='/life-style-diabetes' element={<DiabetesPrediction/>}/>
+        <Route path='/cancer' element = {<CancerPrediction/>}/>
       </Routes>
     </Router>
   );
