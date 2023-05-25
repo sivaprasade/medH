@@ -532,3 +532,48 @@ export const downloadPrescription = async (prescription_id) => {
     return null;
   }
 };
+
+
+
+// ---------------------- disease prediction ---------------------- //
+
+export const predictCancer = async (data) => {
+  try {
+    const response = await axios.post(`${API_URL}/api/predict_cancer`, data);
+    return response.data;
+  } catch (error) {
+    console.error("Error during cancer prediction:", error);
+    return null;
+  }
+};
+
+export const predictDiabetes = async (data) => {
+  try {
+    const response = await axios.post(`${API_URL}/api/predict_diabetes`, data);
+    return response.data;
+  } catch (error) {
+    console.error("Error during diabetes prediction:", error);
+    return null;
+  }
+};
+
+export const predictHeartDisease = async (data) => {
+  try {
+    const response = await axios.post(`${API_URL}/api/predict_heart`, data);
+    return response.data;
+  } catch (error) {
+    console.error("Error during heart disease prediction:", error);
+    return null;
+  }
+};
+
+export const predictLiverDisease = async (data) => {
+  try {
+    const response = await axios.post(`${API_URL}/api/predict_liver`, data);
+    return response.data;
+  } catch (error) {
+    console.error("Error during liver disease prediction:", error);
+    return null;
+  }
+};
+

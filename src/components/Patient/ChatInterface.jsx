@@ -33,6 +33,24 @@ const ChatInterface = () => {
 
   const symptoms = listOfSymptoms;
 
+  const getUserLocation = () => {
+    return new Promise((resolve, reject) => {
+        if (!navigator.geolocation) {
+            reject(new Error('Geolocation is not supported by your browser.'));
+        } else {
+            navigator.geolocation.getCurrentPosition((position) => {
+                resolve({
+                    lat: position.coords.latitude,
+                    lng: position.coords.longitude
+                });
+            }, () => {
+                reject(new Error('Unable to retrieve your location.'));
+            });
+        }
+    });
+};
+
+
   const handleOk = () => {
     if (inputValue.trim() !== "") {
       const userMessage = {
@@ -78,16 +96,12 @@ const ChatInterface = () => {
   const handleSymptomChange = (checkedValues) => {
     setSelectedSymptoms(checkedValues);
   };
-
-  const handleSubmitSymptoms = async () => {
+const handleSubmitSymptoms = async () => {
     if (selectedSymptoms.length >= 3) {
       // Call the API and pass the selected symptoms
-      const requestBody = {
-        symptoms: selectedSymptoms,
-        location: userLocation,
-      };
+      const requestBody = { symptoms: selectedSymptoms };
       const response = await diseasePrediction(requestBody);
-
+  
       const botMessage = {
         sender: "chatbot",
         message: `Based on your symptoms, you may have ${response.disease_prediction}. Please consult a doctor for a proper diagnosis.`,
@@ -96,6 +110,7 @@ const ChatInterface = () => {
       setShowSymptoms(false);
     }
   };
+  
 
   const renderSymptomsSelection = () => {
     const columns = 5;
