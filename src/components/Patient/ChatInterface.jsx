@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Modal, Input, Button, Checkbox, Row, Col } from "antd";
 import { WechatOutlined } from "@ant-design/icons";
 import listOfSymptoms from "./listOfSymtoms";
@@ -11,8 +11,27 @@ const ChatInterface = () => {
   const [chatHistory, setChatHistory] = useState([]);
   const [showSymptoms, setShowSymptoms] = useState(false);
   const [selectedSymptoms, setSelectedSymptoms] = useState([]);
+  const [userLocation, setUserLocation] = useState(null);
 
-  const symptoms = listOfSymptoms
+  useEffect(() => {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          setUserLocation({
+            latitude: position.coords.latitude,
+            longitude: position.coords.longitude,
+          });
+        },
+        (error) => {
+          console.log(error.message);
+        }
+      );
+    } else {
+      console.log("Geolocation is not supported by this browser.");
+    }
+  }, []);
+
+  const symptoms = listOfSymptoms;
 
   const handleOk = () => {
     if (inputValue.trim() !== "") {
@@ -63,9 +82,12 @@ const ChatInterface = () => {
   const handleSubmitSymptoms = async () => {
     if (selectedSymptoms.length >= 3) {
       // Call the API and pass the selected symptoms
-      const requestBody = { symptoms: selectedSymptoms };
+      const requestBody = {
+        symptoms: selectedSymptoms,
+        location: userLocation,
+      };
       const response = await diseasePrediction(requestBody);
-  
+
       const botMessage = {
         sender: "chatbot",
         message: `Based on your symptoms, you may have ${response.disease_prediction}. Please consult a doctor for a proper diagnosis.`,
@@ -74,12 +96,11 @@ const ChatInterface = () => {
       setShowSymptoms(false);
     }
   };
-  
 
   const renderSymptomsSelection = () => {
     const columns = 5;
     const numRows = Math.ceil(symptoms.length / columns);
-  
+
     return (
       <Modal
         title="Select Your Symptoms"
