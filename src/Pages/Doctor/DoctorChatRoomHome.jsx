@@ -21,7 +21,7 @@ const DoctorChatRoomHome = () => {
     fetchData();
   }, []);
 
-  const handleChatRoom = (room_id, username,) => {
+  const handleChatRoom = (room_id, username,user_id) => {
     navigate(`/chat/doctor/${room_id}`, { state: { username,user_id } });
   };
 
