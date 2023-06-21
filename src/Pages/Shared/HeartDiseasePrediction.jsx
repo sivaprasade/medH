@@ -1,5 +1,5 @@
 import React from 'react';
-import { Form, InputNumber, Select, Button, message, Typography, Card } from 'antd';
+import { Form, InputNumber, Select, Button, message, Typography, Card,Input } from 'antd';
 import { predictHeartDisease } from "../../utils/api";
 
 const { Option } = Select;
@@ -29,6 +29,23 @@ const HeartDiseasePrediction = () => {
       </Typography>
       <Card style={{ marginTop: '2rem' }}>
       <Form name="heart_disease_prediction" onFinish={onFinish}>
+
+      <Form.Item label="Name" name="name" rules={[{ required: true }]}>
+          <Input className="small-input" />
+        </Form.Item>
+
+        <Form.Item label="Age" name="age" rules={[{ required: true }]}>
+          <InputNumber min={0} />
+        </Form.Item>
+
+        <Form.Item label="Gender" name="gender" rules={[{ required: true }]}>
+          <Select placeholder="Select gender">
+            <Option value="male">Male</Option>
+            <Option value="female">Female</Option>
+            <Option value="others">Others</Option>
+          </Select>
+        </Form.Item>
+
         <Form.Item label="Chest Pain Type" name="cp" rules={[{ required: true }]}>
           <Select placeholder="Select chest pain type">
             <Option value={0}>Typical Angina</Option>
