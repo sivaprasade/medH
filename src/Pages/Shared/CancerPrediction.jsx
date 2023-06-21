@@ -1,24 +1,30 @@
-import React from 'react';
-import { Form, InputNumber,Input, Button, Card, message,Select } from 'antd';
+import React, { useState } from 'react';
+import { Form, InputNumber, Input, Button, Card, Modal, Select } from 'antd';
 import { predictCancer } from "../../utils/api";
 import { Typography } from 'antd';
 
 const { Title, Paragraph } = Typography;
+const { Option } = Select;
 
 const CancerPrediction = () => {
+  const [predictionModalVisible, setPredictionModalVisible] = useState(false);
+  const [predictionData, setPredictionData] = useState(null);
+  const [formData, setFormData] = useState(null);
+
   const onFinish = async (values) => {
     try {
+      setFormData(values);
       const prediction = await predictCancer(values);
       console.log('Prediction:', prediction);
-      
-      if (prediction.prediction === 1) {
-        message.success('The patient has cancer.');
-      } else {
-        message.info('The patient does not have cancer.');
-      }
+      setPredictionData(prediction);
+      setPredictionModalVisible(true);
     } catch (error) {
       console.error("Error during prediction:", error);
     }
+  };
+
+  const handleModalOk = () => {
+    setPredictionModalVisible(false);
   };
 
   return (
@@ -71,6 +77,23 @@ const CancerPrediction = () => {
           </Button>
         </Form.Item>
       </Form>
+      <Modal
+        title="Cancer Prediction Result"
+        visible={predictionModalVisible}
+        onOk={handleModalOk}
+        onCancel={handleModalOk}
+      >
+        {predictionData && (
+          <>
+            <p><strong>Name:</strong> {formData.name}</p>
+            <p><strong>Age:</strong> {formData.age}</p>
+            <p><strong>Gender:</strong> {formData.gender}</p>
+            {/* Display other prediction details */}
+            <p><strong>Prediction:</strong> {predictionData.prediction === 1 ? 'The patient may have cancer.' : 'The patient does not have cancer.'}</p>
+          </>
+        )}
+      </Modal>
+
     </Card>
   );
 };

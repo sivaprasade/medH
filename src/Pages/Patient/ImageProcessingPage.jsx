@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { Upload, Button, Modal, Card, Typography, message } from 'antd';
-import { InboxOutlined, UploadOutlined, DatabaseOutlined } from '@ant-design/icons';
+import { InboxOutlined, UploadOutlined, DatabaseOutlined,WechatOutlined } from '@ant-design/icons';
 import { uploadReport } from '../../utils/api';
+import ChatInterface from "../../components/Patient/ChatInterface";
 
 const { Title, Paragraph } = Typography;
 const { Dragger } = Upload;
@@ -84,6 +85,21 @@ const ImageProcessingPage = () => {
       <Modal visible={visible} onCancel={handleClose} footer={null}>
         <pre>{JSON.stringify(extractedData, null, 2)}</pre>
       </Modal>
+      <Button
+        type="primary"
+        shape="circle"
+        icon={<WechatOutlined />}
+        size="large"
+        style={{
+          position: "fixed",
+          bottom: "16px",
+          right: "16px",
+        }}
+        onClick={() => {
+          // Code for opening the chatbot
+        }}
+      />
+      <ChatInterface />
     </div>
   );
 };

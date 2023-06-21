@@ -1,6 +1,8 @@
 import React from "react";
 import { Typography, Button } from "antd";
 import { Link } from "react-router-dom";
+import {WechatOutlined} from "@ant-design/icons";
+import ChatInterface from "../../components/Patient/ChatInterface";
 
 const { Title, Paragraph } = Typography;
 
@@ -45,6 +47,21 @@ const AppointmentHomePage = () => {
           <Button type="primary">Appointments</Button>
         </Link>
       </div>
+      <Button
+        type="primary"
+        shape="circle"
+        icon={<WechatOutlined />}
+        size="large"
+        style={{
+          position: "fixed",
+          bottom: "16px",
+          right: "16px",
+        }}
+        onClick={() => {
+          // Code for opening the chatbot
+        }}
+      />
+      <ChatInterface />
     </div>
   );
 };

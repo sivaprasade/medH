@@ -1,23 +1,30 @@
-import React from 'react';
-import { Form, InputNumber, Button, Card, Typography, message,Select,Input } from 'antd';
+import React,{useState} from 'react';
+import { Form, InputNumber, Button, Card, Typography, Modal,Select,Input } from 'antd';
 import { predictDiabetes } from "../../utils/api";
 
 const { Title, Text } = Typography;
+const { Option } = Select;
 
 const DiabetesPrediction = () => {
+
+  const [predictionModalVisible, setPredictionModalVisible] = useState(false);
+  const [predictionData, setPredictionData] = useState(null);
+  const [formData, setFormData] = useState(null);
+
   const onFinish = async (values) => {
     try {
+      setFormData(values);
       const prediction = await predictDiabetes(values);
       console.log('Prediction:', prediction);
-
-      if (prediction.prediction === 1) {
-        message.success('The patient has diabetes.');
-      } else {
-        message.info('The patient does not have diabetes.');
-      }
+      setPredictionData(prediction);
+      setPredictionModalVisible(true);
     } catch (error) {
       console.error("Error during prediction:", error);
     }
+  };
+
+  const handleModalOk = () => {
+    setPredictionModalVisible(false);
   };
 
   return (
@@ -66,9 +73,9 @@ const DiabetesPrediction = () => {
           <InputNumber min={0} step={0.001} />
         </Form.Item>
 
-        <Form.Item label="Age" name="age" rules={[{ required: true }]}>
+        {/* <Form.Item label="Age" name="age" rules={[{ required: true }]}>
           <InputNumber min={0} />
-        </Form.Item>
+        </Form.Item> */}
 
         <Form.Item>
           <Button type="primary" htmlType="submit">
@@ -76,6 +83,22 @@ const DiabetesPrediction = () => {
           </Button>
         </Form.Item>
       </Form>
+      <Modal
+        title="Cancer Prediction Result"
+        visible={predictionModalVisible}
+        onOk={handleModalOk}
+        onCancel={handleModalOk}
+      >
+        {predictionData && (
+          <>
+            <p><strong>Name:</strong> {formData.name}</p>
+            <p><strong>Age:</strong> {formData.age}</p>
+            <p><strong>Gender:</strong> {formData.gender}</p>
+            {/* Display other prediction details */}
+            <p><strong>Prediction:</strong> {predictionData.prediction === 1 ? 'The patient may have Diabetes.' : 'The patient does not have Diabetes.'}</p>
+          </>
+        )}
+      </Modal>
     </Card>
   );
 };

@@ -1,7 +1,8 @@
 import React,{useState} from "react";
 import { List, Button, message, Typography } from "antd";
-import { DownloadOutlined } from "@ant-design/icons";
+import { DownloadOutlined,WechatOutlined } from "@ant-design/icons";
 import { getMedicalFiles, downloadMedicalFile } from "../../utils/api"
+import ChatInterface from "../../components/Patient/ChatInterface";
 
 const { Title, Paragraph } = Typography;
 
@@ -70,6 +71,21 @@ const ListMedicalRecords = () => {
           </List.Item>
         )}
       />
+      <Button
+        type="primary"
+        shape="circle"
+        icon={<WechatOutlined />}
+        size="large"
+        style={{
+          position: "fixed",
+          bottom: "16px",
+          right: "16px",
+        }}
+        onClick={() => {
+          // Code for opening the chatbot
+        }}
+      />
+      <ChatInterface />
     </div>
   );
 };

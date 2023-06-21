@@ -4,6 +4,7 @@ import { WechatOutlined } from "@ant-design/icons";
 import listOfSymptoms from "./listOfSymtoms";
 import "./ChatInterface.css";
 import { diseasePrediction } from "../../utils/api";
+import { useNavigate } from "react-router-dom";
 
 const ChatInterface = () => {
   const [visible, setVisible] = useState(false);
@@ -12,25 +13,28 @@ const ChatInterface = () => {
   const [showSymptoms, setShowSymptoms] = useState(false);
   const [selectedSymptoms, setSelectedSymptoms] = useState([]);
 
-  const symptoms = listOfSymptoms
+  const symptoms = listOfSymptoms;
+  const navigate = useNavigate();
 
   const getUserLocation = () => {
     return new Promise((resolve, reject) => {
-        if (!navigator.geolocation) {
-            reject(new Error('Geolocation is not supported by your browser.'));
-        } else {
-            navigator.geolocation.getCurrentPosition((position) => {
-                resolve({
-                    lat: position.coords.latitude,
-                    lng: position.coords.longitude
-                });
-            }, () => {
-                reject(new Error('Unable to retrieve your location.'));
+      if (!navigator.geolocation) {
+        reject(new Error("Geolocation is not supported by your browser."));
+      } else {
+        navigator.geolocation.getCurrentPosition(
+          (position) => {
+            resolve({
+              lat: position.coords.latitude,
+              lng: position.coords.longitude,
             });
-        }
+          },
+          () => {
+            reject(new Error("Unable to retrieve your location."));
+          }
+        );
+      }
     });
-};
-
+  };
 
   const handleOk = () => {
     if (inputValue.trim() !== "") {
@@ -56,8 +60,36 @@ const ChatInterface = () => {
         const botMessage = {
           sender: "chatbot",
           message:
-            "Here are my functions:\n!hi - to greet me\n!predict-my-disease or !predict - to predict your disease based on your symptoms\n!help - to see my functions",
+            "Here are my functions:\n!hi - to greet me\n!predict-my-disease or !predict - to predict your disease based on your symptoms\n !doctor-list - to redirect to doctor list page\n !appointment - to redirect to patient appointment list page\n !chatlist - redirect to chatlist of doctors\n !list-medical-records - list medical records\n !life-style - redirect to life style disease prediction page\n !image-processing - redirect to image processing page\n !help - to see my functions",
         };
+        setChatHistory([...chatHistory, botMessage]);
+      } else if (inputValue === "!doctor-list") {
+        navigate("/doctor-list");
+        setVisible(false);
+        setChatHistory([...chatHistory, botMessage]);
+      } else if (inputValue === "!appointment") {
+        navigate("/patient-appointments")
+        setVisible(false);
+        setChatHistory([...chatHistory, botMessage]);
+      }else if(inputValue === "!chatlist"){
+        navigate("/chat-home")
+        setVisible(false);
+        setChatHistory([...chatHistory, botMessage]);
+      }else if(inputValue === "!list-medical-records"){
+        navigate("/list-medical-records")
+        setVisible(false);
+        setChatHistory([...chatHistory, botMessage]);
+      } else if(inputValue === "!life-style"){
+        navigate("/life-style")
+        setVisible(false);
+        setChatHistory([...chatHistory, botMessage]);
+      } else if(inputValue === "!image-processing"){
+        navigate("/image-processing")
+        setVisible(false);
+        setChatHistory([...chatHistory, botMessage]);
+      } else if(inputValue === "!home"){
+        navigate("/patient-home")
+        setVisible(false);
         setChatHistory([...chatHistory, botMessage]);
       } else {
         const botMessage = {
@@ -77,32 +109,32 @@ const ChatInterface = () => {
   const handleSymptomChange = (checkedValues) => {
     setSelectedSymptoms(checkedValues);
   };
-const handleSubmitSymptoms = async () => {
+  const handleSubmitSymptoms = async () => {
     if (selectedSymptoms.length >= 3) {
-        // Get user's current location
-        try {
-            const location = await getUserLocation();
-            // Call the API and pass the selected symptoms and user's current location
-            const requestBody = { symptoms: selectedSymptoms, location };
-            const response = await diseasePrediction(requestBody);
-    
-            const botMessage = {
-                sender: "chatbot",
-                message: `Based on your symptoms, you may have ${response.disease_prediction}. Please consult a doctor for a proper diagnosis.`,
-            };
-            setChatHistory([...chatHistory, botMessage]);
-            setShowSymptoms(false);
-        } catch (error) {
-            console.error('Error getting user location:', error);
-            // Handle the error...
-        }
+      // Get user's current location
+      try {
+        const location = await getUserLocation();
+        // Call the API and pass the selected symptoms and user's current location
+        const requestBody = { symptoms: selectedSymptoms, location };
+        const response = await diseasePrediction(requestBody);
+
+        const botMessage = {
+          sender: "chatbot",
+          message: `Based on your symptoms, you may have ${response.disease_prediction}. Please consult a doctor for a proper diagnosis.`,
+        };
+        setChatHistory([...chatHistory, botMessage]);
+        setShowSymptoms(false);
+      } catch (error) {
+        console.error("Error getting user location:", error);
+        // Handle the error...
+      }
     }
-};
+  };
 
   const renderSymptomsSelection = () => {
     const columns = 5;
     const numRows = Math.ceil(symptoms.length / columns);
-  
+
     return (
       <Modal
         title="Select Your Symptoms"
