@@ -1,9 +1,20 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useLocation } from "react-router-dom";
 import { sendMessage, getMessages, addPrescription } from "../../utils/api";
-import { message, Input, List, Card, Button, Modal, Form, Alert } from "antd";
+import {
+  message,
+  Input,
+  List,
+  Card,
+  Button,
+  Modal,
+  Form,
+  Alert,
+  DatePicker,
+  TimePicker,
+} from "antd";
 import { SendOutlined, PlusOutlined } from "@ant-design/icons";
-import "../../components/Shared/ChatRoom.css"
+import "../../components/Shared/ChatRoom.css";
 
 const ChatRoomDoctor = () => {
   const [messageInput, setMessageInput] = useState("");
@@ -17,7 +28,7 @@ const ChatRoomDoctor = () => {
   const doctorName = localStorage.getItem("doctor_name");
   const doctorId = localStorage.getItem("doctor_id");
 
-  console.log(location.state); 
+  console.log(location.state);
 
   useEffect(() => {
     console.log(`Loading messages for room: ${roomId}`);
@@ -41,7 +52,7 @@ const ChatRoomDoctor = () => {
     const newMessage = {
       sender_id: senderId,
       content: messageInput,
-      timestamp: new Date().toISOString()
+      timestamp: new Date().toISOString(),
     };
 
     sendMessage(roomId, messageInput, senderId)
@@ -63,7 +74,7 @@ const ChatRoomDoctor = () => {
     form
       .validateFields()
       .then((values) => {
-        const { symptoms, prescription,disease_name } = values;
+        const { symptoms, prescription, disease_name, date, time } = values;
         addPrescription({
           user_id,
           doctor_id: doctorId,
@@ -72,7 +83,9 @@ const ChatRoomDoctor = () => {
           symptoms,
           prescription,
           disease_name,
-          status: true
+          status: true,
+          date,
+          time
         })
           .then((response) => {
             setIsModalVisible(false);
@@ -84,10 +97,9 @@ const ChatRoomDoctor = () => {
           });
       })
       .catch((info) => {
-        console.log('Validate Failed:', info);
+        console.log("Validate Failed:", info);
       });
   };
-  
 
   const handleCancel = () => {
     setIsModalVisible(false);
@@ -96,9 +108,18 @@ const ChatRoomDoctor = () => {
   return (
     <div className="chat-room-container">
       <Card title={"ChatRoom"} bordered={false}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1em' }}>
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+            marginBottom: "1em",
+          }}
+        >
           <h2>{`Chat with ${username}`}</h2>
-          <Button type="primary" onClick={handleAddPrescription}>Add Prescription</Button>
+          <Button type="primary" onClick={handleAddPrescription}>
+            Add Prescription
+          </Button>
         </div>
         {messages && messages.length > 0 ? (
           <List
@@ -106,9 +127,19 @@ const ChatRoomDoctor = () => {
             itemLayout="horizontal"
             dataSource={messages}
             renderItem={(item) => (
-              <List.Item className={item.sender_id === localStorage.getItem("doctor_id") ? "message-row sent" : "message-row received"}>
+              <List.Item
+                className={
+                  item.sender_id === localStorage.getItem("doctor_id")
+                    ? "message-row sent"
+                    : "message-row received"
+                }
+              >
                 <List.Item.Meta
-                  title={item.sender_id === localStorage.getItem("doctor_id") ? "You" : item.sender_name}
+                  title={
+                    item.sender_id === localStorage.getItem("doctor_id")
+                      ? "You"
+                      : item.sender_name
+                  }
                   description={item.content}
                 />
               </List.Item>
@@ -132,23 +163,32 @@ const ChatRoomDoctor = () => {
             }
           />
         </div>
-        <Modal title="Add Prescription" visible={isModalVisible} onOk={handleOk} onCancel={handleCancel}>
+        <Modal
+          title="Add Prescription"
+          visible={isModalVisible}
+          onOk={handleOk}
+          onCancel={handleCancel}
+        >
           <Form form={form} layout="vertical" name="form_in_modal">
-            
             <Form.List name="symptoms">
               {(fields, { add, remove }) => (
                 <>
-                  {fields.map(field => (
+                  {fields.map((field) => (
                     <Form.Item
                       {...field}
                       label="Symptom"
-                      rules={[{ required: true, message: 'Missing symptom' }]}
+                      rules={[{ required: true, message: "Missing symptom" }]}
                     >
                       <Input />
                     </Form.Item>
                   ))}
                   <Form.Item>
-                    <Button type="dashed" onClick={() => add()} block icon={<PlusOutlined />}>
+                    <Button
+                      type="dashed"
+                      onClick={() => add()}
+                      block
+                      icon={<PlusOutlined />}
+                    >
                       Add symptom
                     </Button>
                   </Form.Item>
@@ -158,16 +198,34 @@ const ChatRoomDoctor = () => {
             <Form.Item
               name="disease_name"
               label="Disease Name"
-              rules={[{ required: true, message: 'Please input the Disease Name!' }]}
+              rules={[
+                { required: true, message: "Please input the Disease Name!" },
+              ]}
             >
               <Input />
             </Form.Item>
             <Form.Item
               name="prescription"
               label="Prescription"
-              rules={[{ required: true, message: 'Please input the prescription!' }]}
+              rules={[
+                { required: true, message: "Please input the prescription!" },
+              ]}
             >
               <Input />
+            </Form.Item>
+            <Form.Item
+              name="date"
+              label="Date"
+              rules={[{ required: true, message: "Please select the date!" }]}
+            >
+              <DatePicker />
+            </Form.Item>
+            <Form.Item
+              name="time"
+              label="Time"
+              rules={[{ required: true, message: "Please select the time!" }]}
+            >
+              <TimePicker />
             </Form.Item>
           </Form>
         </Modal>

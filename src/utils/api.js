@@ -577,3 +577,20 @@ export const predictLiverDisease = async (data) => {
   }
 };
 
+// ---------------------- OCR report extraction ---------------------- //
+
+export const uploadReport = async (userId, file) => {
+  try {
+    const formData = new FormData();
+    formData.append('file', file);
+    const response = await axios.post(`${API_URL}/api/uploadfile/${userId}`, formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Error during report upload:", error);
+    return null;
+  }
+};

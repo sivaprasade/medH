@@ -6,6 +6,8 @@ import {
   getAppointmentsByDoctorId,
 } from "../../utils/api";
 import AppointmentForm from "../../components/Patient/AppointmentForm";
+import {WechatOutlined} from "@ant-design/icons";
+import ChatInterface from "../../components/Patient/ChatInterface";
 
 const { Title, Paragraph } = Typography;
 
@@ -141,6 +143,21 @@ const DoctorListPage = () => {
           onSubmit={handleSubmit}
         />
       )}
+      <Button
+        type="primary"
+        shape="circle"
+        icon={<WechatOutlined />}
+        size="large"
+        style={{
+          position: "fixed",
+          bottom: "16px",
+          right: "16px",
+        }}
+        onClick={() => {
+          // Code for opening the chatbot
+        }}
+      />
+      <ChatInterface />
     </div>
   );
 };

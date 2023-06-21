@@ -19,6 +19,7 @@ import LiverDiseasePrediction from './Pages/Shared/LiverDiseasePrediction';
 import HeartDiseasePrediction from './Pages/Shared/HeartDiseasePrediction';
 import DiabetesPrediction from './Pages/Shared/DiabetesPrediction';
 import CancerPrediction from './Pages/Shared/CancerPrediction';
+import ImageProcessingPage from './Pages/Patient/ImageProcessingPage';
 
 
 function App() {
@@ -45,6 +46,7 @@ function App() {
         <Route path='/life-style-heart' element={<HeartDiseasePrediction/>}/>
         <Route path='/life-style-diabetes' element={<DiabetesPrediction/>}/>
         <Route path='/cancer' element = {<CancerPrediction/>}/>
+        <Route path='/image-processing' element = {<ImageProcessingPage/>}/>
       </Routes>
     </Router>
   );

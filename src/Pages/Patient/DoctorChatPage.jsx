@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import { getAcceptedAppointmentsByUserId } from "../../utils/api";
 import { List, message, Button,Typography } from "antd";
 import { useNavigate } from "react-router-dom";
+import {WechatOutlined} from "@ant-design/icons";
+import ChatInterface from "../../components/Patient/ChatInterface";
 
 const { Title, Paragraph } = Typography;
 
@@ -56,6 +58,21 @@ const DoctorChatPage = () => {
           )}
         />
       )}
+      <Button
+        type="primary"
+        shape="circle"
+        icon={<WechatOutlined />}
+        size="large"
+        style={{
+          position: "fixed",
+          bottom: "16px",
+          right: "16px",
+        }}
+        onClick={() => {
+          // Code for opening the chatbot
+        }}
+      />
+      <ChatInterface />
     </div>
   );
 };

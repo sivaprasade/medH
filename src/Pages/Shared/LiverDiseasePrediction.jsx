@@ -1,27 +1,32 @@
-import React from 'react';
-import { Form, InputNumber, Button, message, Typography, Card } from 'antd';
-//import { predictLiverDisease } from "../../utils/api"
+import React, {useState} from 'react';
+import { Form, InputNumber, Button, Modal, Typography, Card,Select,Input } from 'antd';
+import { predictLiverDisease } from "../../utils/api"
 
 const { Title, Paragraph } = Typography;
 
-const formItemLayout = {
-  labelCol: { span: 6 },
-  wrapperCol: { span: 14 },
-};
+// const formItemLayout = {
+//   labelCol: { span: 6 },
+//   wrapperCol: { span: 14 },
+// };
 
 const LiverDiseasePrediction = () => {
+  const [predictionModalVisible, setPredictionModalVisible] = useState(false);
+  const [predictionData, setPredictionData] = useState(null);
+  const [formData, setFormData] = useState(null);
   const onFinish = async (values) => {
     try {
+      setFormData(values);
       const prediction = await predictLiverDisease(values);
       console.log('Prediction:', prediction);
-      if (prediction.prediction === 1) {
-        message.success('The patient has liver disease.');
-      } else {
-        message.info('The patient does not have liver disease.');
-      }
+      setPredictionData(prediction);
+      setPredictionModalVisible(true);
     } catch (error) {
       console.error("Error during prediction:", error);
     }
+  };
+
+  const handleModalOk = () => {
+    setPredictionModalVisible(false);
   };
 
   return (
@@ -33,7 +38,25 @@ const LiverDiseasePrediction = () => {
         </Paragraph>
       </Typography>
       <Card style={{ marginTop: '2rem' }}>
-        <Form {...formItemLayout} name="liver_disease_prediction" onFinish={onFinish}>
+        <Form  name="liver_disease_prediction" onFinish={onFinish} style={{ marginTop: 20 }}>
+
+        <Form.Item label="Name" name="name" rules={[{ required: true }]}>
+          <Input className="small-input" />
+        </Form.Item>
+
+        <Form.Item label="Age" name="age" rules={[{ required: true }]}>
+          <InputNumber min={0} />
+        </Form.Item>
+
+        <Form.Item label="Gender" name="gender" rules={[{ required: true }]}>
+          <Select placeholder="Select gender">
+            <Option value="male">Male</Option>
+            <Option value="female">Female</Option>
+            <Option value="others">Others</Option>
+          </Select>
+        </Form.Item>
+
+
           <Form.Item label="Total Bilirubin" name="Total_Bilirubin" rules={[{ required: true }]}>
             <InputNumber min={0} />
           </Form.Item>
@@ -68,6 +91,22 @@ const LiverDiseasePrediction = () => {
             </Button>
           </Form.Item>
         </Form>
+        <Modal
+        title="Cancer Prediction Result"
+        visible={predictionModalVisible}
+        onOk={handleModalOk}
+        onCancel={handleModalOk}
+      >
+        {predictionData && (
+          <>
+            <p><strong>Name:</strong> {formData.name}</p>
+            <p><strong>Age:</strong> {formData.age}</p>
+            <p><strong>Gender:</strong> {formData.gender}</p>
+            {/* Display other prediction details */}
+            <p><strong>Prediction:</strong> {predictionData.prediction === 1 ? 'The patient may have Liver Disease.' : 'The patient does not have Liver Disease.'}</p>
+          </>
+        )}
+      </Modal>
       </Card>
     </div>
   );
